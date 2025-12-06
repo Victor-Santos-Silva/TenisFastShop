@@ -1,98 +1,153 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router'
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native'
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+export default function HomeAfterLogin () {
+  const router = useRouter()
 
-export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Bem-vindo de volta! 👋</Text>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+      <Text style={styles.subtitle}>Explore os melhores tênis do momento</Text>
+
+      {/* Banner Principal */}
+      <Image
+        source={require('../../assets/images/TenisDeLogin.jpg')}
+        style={styles.banner}
+      />
+
+      {/* Botões principais */}
+      <View style={styles.buttonsWrapper}>
+        <TouchableOpacity
+          style={styles.btnPrimary}
+          onPress={() => router.push('/produtos')}
+        >
+          <Text style={styles.btnPrimaryText}>Ver Tênis</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.btnSecondary}
+          onPress={() => router.push('/favoritos')}
+        >
+          <Text style={styles.btnSecondaryText}>Favoritos</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.btnOutline}
+          onPress={() => router.push('/perfil')}
+        >
+          <Text style={styles.btnOutlineText}>Perfil</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Lista de destaques */}
+      <Text style={styles.sectionTitle}>Destaques</Text>
+
+      <View style={styles.highlights}>
+        <Image
+          source={require('../../assets/images/TenisDeLogin.jpg')}
+          style={styles.card}
+        />
+        <Image
+          source={require('../../assets/images/TenisDeLogin.jpg')}
+          style={styles.card}
+        />
+        <Image
+          source={require('../../assets/images/TenisDeLogin.jpg')}
+          style={styles.card}
+        />
+      </View>
+    </ScrollView>
+  )
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    padding: 20,
+    backgroundColor: '#fff',
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#2E7D32',
+    textAlign: 'center',
+    marginTop: 20
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 20
+  },
+  banner: {
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
+    marginBottom: 20,
+    resizeMode: 'cover'
+  },
+  buttonsWrapper: {
+    width: '100%',
+    marginBottom: 20
+  },
+  btnPrimary: {
+    backgroundColor: '#2E7D32',
+    padding: 14,
+    borderRadius: 10,
+    marginBottom: 10
+  },
+  btnPrimaryText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  btnSecondary: {
+    backgroundColor: '#4CAF50',
+    padding: 14,
+    borderRadius: 10,
+    marginBottom: 10
+  },
+  btnSecondaryText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 18
+  },
+  btnOutline: {
+    borderWidth: 2,
+    borderColor: '#2E7D32',
+    padding: 14,
+    borderRadius: 10,
+    marginBottom: 20
+  },
+  btnOutlineText: {
+    color: '#2E7D32',
+    textAlign: 'center',
+    fontSize: 18
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#2E7D32',
+    alignSelf: 'flex-start',
+    marginBottom: 10
+  },
+  highlights: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    gap: 10
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+  card: {
+    width: 120,
+    height: 120,
+    borderRadius: 10,
+    resizeMode: 'cover'
+  }
+})
