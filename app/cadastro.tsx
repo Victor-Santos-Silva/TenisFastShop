@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import {
@@ -11,39 +12,55 @@ import {
 export default function CadastroScreen () {
   const router = useRouter()
 
-  const [nome, setNome] = useState('')
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
-  const [confirmSenha, setConfirmSenha] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
-  function handleRegister () {
-    if (!nome || !email || !senha || !confirmSenha) {
+  async function handleRegister () {
+    const url: string = 'http://10.0.2.2:3000/api/users'
+
+    if (!name || !email || !password || !confirmPassword) {
       alert('Preencha todos os campos!')
       return
     }
 
-    if (senha !== confirmSenha) {
+    if (password !== confirmPassword) {
       alert('As senhas não coincidem!')
       return
     }
 
-    // Aqui futuramente você vai chamar a API
-    alert(`Usuário ${nome} cadastrado com sucesso!`)
+    try {
+      const response = await axios.post(url, {
+        name,
+        email,
+        password
+      })
 
-    router.replace('/login') // Vai para tela de login após cadastro
+      console.log(response.data)
+
+      alert('Usuário cadastrado com sucesso!')
+      router.replace('/login')
+    } catch (error: any) {
+      console.log(error.response?.data)
+
+      const msg = error.response?.data?.msg || 'Erro ao cadastrar usuário.'
+
+      alert(msg)
+    }
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Criar Conta</Text>
 
-      <Text style={styles.label}>Nome</Text>
+      <Text style={styles.label}>name</Text>
       <TextInput
         style={styles.input}
-        placeholder='Digite seu nome'
+        placeholder='Digite seu name'
         placeholderTextColor='#999'
-        value={nome}
-        onChangeText={setNome}
+        value={name}
+        onChangeText={setName}
       />
 
       <Text style={styles.label}>Email</Text>
@@ -62,8 +79,8 @@ export default function CadastroScreen () {
         placeholder='Digite sua senha'
         placeholderTextColor='#999'
         secureTextEntry
-        value={senha}
-        onChangeText={setSenha}
+        value={password}
+        onChangeText={setPassword}
       />
 
       <Text style={styles.label}>Confirmar senha</Text>
@@ -72,8 +89,8 @@ export default function CadastroScreen () {
         placeholder='Repita sua senha'
         placeholderTextColor='#999'
         secureTextEntry
-        value={confirmSenha}
-        onChangeText={setConfirmSenha}
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
       />
 
       <TouchableOpacity style={styles.btn} onPress={handleRegister}>
