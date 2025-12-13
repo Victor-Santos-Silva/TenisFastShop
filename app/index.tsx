@@ -65,13 +65,6 @@ export default function HomeScreen () {
             <Text style={styles.btnSecondaryText}>Cadastro</Text>
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          style={styles.btnOutline}
-          onPress={() => router.push('/(tabs)')}
-        >
-          <Text style={styles.btnOutlineText}>Continuar como convidado</Text>
-        </TouchableOpacity>
       </View>
     </View>
   )

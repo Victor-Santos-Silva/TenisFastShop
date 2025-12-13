@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -20,33 +21,23 @@ export default function CadastroScreen () {
   async function handleRegister () {
     const url: string = 'http://10.0.2.2:3000/api/users'
 
-    if (!name || !email || !password || !confirmPassword) {
-      alert('Preencha todos os campos!')
-      return
-    }
-
     if (password !== confirmPassword) {
-      alert('As senhas não coincidem!')
+      Alert.alert('Atenção', 'As senhas não coincidem!')
       return
     }
 
     try {
-      const response = await axios.post(url, {
+      await axios.post(url, {
         name,
         email,
         password
       })
 
-      console.log(response.data)
-
-      alert('Usuário cadastrado com sucesso!')
+      Alert.alert('Atenção', 'Usuário cadastrado com sucesso!')
       router.replace('/login')
     } catch (error: any) {
-      console.log(error.response?.data)
-
       const msg = error.response?.data?.msg || 'Erro ao cadastrar usuário.'
-
-      alert(msg)
+      Alert.alert('Atenção', msg)
     }
   }
 
@@ -54,7 +45,7 @@ export default function CadastroScreen () {
     <View style={styles.container}>
       <Text style={styles.title}>Criar Conta</Text>
 
-      <Text style={styles.label}>name</Text>
+      <Text style={styles.label}>Nome:</Text>
       <TextInput
         style={styles.input}
         placeholder='Digite seu name'
@@ -63,7 +54,7 @@ export default function CadastroScreen () {
         onChangeText={setName}
       />
 
-      <Text style={styles.label}>Email</Text>
+      <Text style={styles.label}>Email:</Text>
       <TextInput
         style={styles.input}
         placeholder='Digite seu email'
@@ -73,7 +64,7 @@ export default function CadastroScreen () {
         onChangeText={setEmail}
       />
 
-      <Text style={styles.label}>Senha</Text>
+      <Text style={styles.label}>Senha:</Text>
       <TextInput
         style={styles.input}
         placeholder='Digite sua senha'
@@ -83,7 +74,7 @@ export default function CadastroScreen () {
         onChangeText={setPassword}
       />
 
-      <Text style={styles.label}>Confirmar senha</Text>
+      <Text style={styles.label}>Confirmar Senha:</Text>
       <TextInput
         style={styles.input}
         placeholder='Repita sua senha'

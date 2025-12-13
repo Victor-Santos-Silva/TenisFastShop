@@ -1,6 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import axios from 'axios'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -14,17 +17,21 @@ export default function LoginScreen () {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  function handleLogin () {
-    if (!email || !password) {
-      alert('Preencha todos os campos!')
+  async function handleLogin () {
+    const url: string = 'http://10.0.2.2:3000/api/users/login'
+    try {
+      const response = await axios.post(url, {
+        email,
+        password
+      })
+      const { token, usuario } = response.data.login
+      await AsyncStorage.setItem(token, usuario)
+      router.replace('/(tabs)')
+    } catch (error: any) {
+      const msg = error.response?.data?.msg || 'Erro ao entrar na conta.'
+      Alert.alert('Atenção', msg)
       return
     }
-
-    // Aqui você faz o fetch na sua API
-    alert(`Login realizado com: ${email}`)
-
-    // Redirecionar para a Home, Dashboard etc.
-    /* router.push('/(tabs)'); */
   }
 
   return (
