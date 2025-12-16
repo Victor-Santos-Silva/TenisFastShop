@@ -7,15 +7,28 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
-  View
+  TouchableOpacity
 } from 'react-native'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
+} from 'react-native-reanimated'
 
 export default function LoginScreen () {
   const router = useRouter()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const opacity = useSharedValue(1)
+  const translateY = useSharedValue(0)
+
+  // 🎬 estilo animado
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+    transform: [{ translateY: translateY.value }]
+  }))
 
   async function handleLogin () {
     const url: string = 'http://10.0.2.2:3000/api/users/login'
@@ -26,7 +39,14 @@ export default function LoginScreen () {
       })
       const { token, usuario } = response.data.login
       await AsyncStorage.setItem(token, usuario)
-      router.replace('/(tabs)')
+
+      // 🚀 anima a saída da tela
+      opacity.value = withTiming(0, { duration: 400 })
+      translateY.value = withTiming(-40, { duration: 400 })
+
+      setTimeout(() => {
+        router.replace('/(tabs)')
+      }, 400)
     } catch (error: any) {
       const msg = error.response?.data?.msg || 'Erro ao entrar na conta.'
       Alert.alert('Atenção', msg)
@@ -35,7 +55,7 @@ export default function LoginScreen () {
   }
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, animatedStyle]}>
       <Text style={styles.title}>Entrar na Conta</Text>
 
       <Text style={styles.label}>Email</Text>
@@ -65,7 +85,7 @@ export default function LoginScreen () {
       <TouchableOpacity onPress={() => router.push('/cadastro')}>
         <Text style={styles.link}>Criar uma conta</Text>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   )
 }
 
